@@ -1,0 +1,36 @@
+{
+  "name": "git-guide-mern",
+  "version": "1.0.0",
+  "description": "This web application generates commands for Git",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "server": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Radist-electric/git-guide-mern.git"
+  },
+  "keywords": [
+    "git",
+    "react",
+    "nodejs",
+    "express",
+    "mongodb",
+    "mern"
+  ],
+  "author": "Alexey Raimov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Radist-electric/git-guide-mern/issues"
+  },
+  "homepage": "https://github.com/Radist-electric/git-guide-mern#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.10.14"
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.6"
+  }
+}

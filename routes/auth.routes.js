@@ -1,4 +1,6 @@
 const { Router } = require('express')
+const config = require('config')
+const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const { check, validationResult } = require('express-validator')
 const User = require('../models/User')
@@ -10,19 +12,20 @@ router.post(
   [
     check('email', 'Некорректный email').isEmail(),
     check('password')
-    .isLength({ min: 8 }).withMessage('Минимальная длина пароля 8 символов')
-    .matches(/\d/).withMessage('Пароль должен содержать хотя бы одну цифру')
+      .isLength({ min: 8 }).withMessage('Минимальная длина пароля 8 символов')
+      .matches(/\d/).withMessage('Пароль должен содержать хотя бы одну цифру')
   ],
   async (req, res) => {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array(),
-        message: 'Некорректные данные при регистрации'
-      })
-    }
-
     try {
+      const errors = validationResult(req)
+
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          errors: errors.array(),
+          message: 'Некорректные данные при регистрации'
+        })
+      }
+
       const { email, password } = req.body
       const candidate = await User.findOne({ email })
 
@@ -43,8 +46,49 @@ router.post(
   })
 
 //api/auth/login
-router.post('/register', async (req, res) => {
+router.post(
+  '/login',
+  [
+    check('email', 'Некорректный email').normalizeEmail().isEmail(),
+    check('password', 'Введите пароль').exists()
+  ],
+  async (req, res) => {
 
-})
+    try {
+      const errors = validationResult(req)
+
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          errors: errors.array(),
+          message: 'Некорректные данные при входе в систему'
+        })
+      }
+
+      const { email, password } = req.body
+      const user = await User.findOne({ email })
+
+      if (!user) {
+        return res.status(400).json({ message: 'Некорректные данные при входе в систему' })
+      }
+
+      const isMatch = await bcrypt.compare(password, user.password)
+
+      if (!isMatch) {
+        return res.status(400).json({ message: 'Некорректные данные при входе в систему' })
+      }
+
+      const token = jwt.sign(
+        { userId: user.id },
+        config.get('jwtsecret'),
+        { expiresIn: '1h' }
+      )
+
+        res.json({token, userId: user.id})
+
+    } catch (e) {
+      res.status(500).json({ message: 'Что-то пошло не так. Попробуйте снова.' })
+    }
+
+  })
 
 module.exports = router

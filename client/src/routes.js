@@ -6,9 +6,10 @@ import { InteractivePage } from './pages/InteractivePage'
 import { GitPage } from './pages/GitPage'
 import { AboutPage } from './pages/AboutPage'
 import { AuthPage } from './pages/AuthPage'
-// import { NotFoundPagePage } from './pages/NotFoundPagePage'
+import { NotFoundPage } from './pages/NotFoundPage'
 
 export const useRoutes = isAuthenticated => {
+
   if (isAuthenticated) {
     return (
       <Switch>
@@ -30,6 +31,9 @@ export const useRoutes = isAuthenticated => {
         <Route exact path="/auth">
           <AuthPage />
         </Route>
+        <Route exact path="/404">
+          <NotFoundPage />
+        </Route>
         <Redirect to="/404" />
       </Switch>
     )
@@ -42,6 +46,9 @@ export const useRoutes = isAuthenticated => {
       <Route exact path="/commands">
         <CommandsPage />
       </Route>
+      <Route exact path="/interactive">
+        <Redirect to="/auth" />
+      </Route>
       <Route exact path="/git">
         <GitPage />
       </Route>
@@ -50,6 +57,9 @@ export const useRoutes = isAuthenticated => {
       </Route>
       <Route exact path="/auth">
         <AuthPage />
+      </Route>
+      <Route exact path="/404">
+        <NotFoundPage />
       </Route>
       <Redirect to="/404" />
     </Switch>

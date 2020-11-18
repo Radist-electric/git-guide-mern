@@ -1,10 +1,12 @@
 import { useState, useCallback, useEffect } from 'react'
+import { useMessage } from './message.hook'
 
 const storageName = 'userData'
 
 export const useAuth = () => {
   const [token, setToken] = useState(null)
   const [userId, setUserid] = useState(null)
+  const message = useMessage()
 
   const login = useCallback((jwtToken, id) => {
     setToken(jwtToken)
@@ -18,7 +20,8 @@ export const useAuth = () => {
     setToken(null)
     setUserid(null)
     localStorage.removeItem(storageName)
-  }, [])
+    message('Вы вышли из системы')
+  }, [message])
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem(storageName))

@@ -84,7 +84,7 @@ router.post(
         { expiresIn: '1h' }
       )
 
-      res.json({ token, userId: user.id })
+      res.json({ token, userId: user.id, message: 'Вы успешно вошли в систему' })
 
     } catch (e) {
       res.status(500).json({ message: 'Что-то пошло не так. Попробуйте снова.' })

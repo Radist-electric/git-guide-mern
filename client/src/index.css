@@ -6,12 +6,14 @@
   justify-content: flex-start;
   min-height: 100vh;
 }
-.mr-10 {
-  margin-right: 10px;
-}
 .logo {
   position: absolute;
   transform: translateY(30%)
+}
+.reg {
+  line-height: 36px;
+  text-decoration: underline;
+  cursor: pointer;
 }
 .footer {
   padding: 5px 0;

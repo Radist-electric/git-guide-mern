@@ -12,8 +12,10 @@ export const AuthPage = () => {
     password: '',
     nickName: '',
     firstName: '',
-    lastName: ''
+    lastName: '',
+    role: 'user'
   })
+  const [register, setRegister] = useState(false)
 
   useEffect(() => {
     message(error)
@@ -40,7 +42,12 @@ export const AuthPage = () => {
       const data = await request('/api/auth/login', 'POST', { ...form })
       message(data.message)
       auth.login(data.token, data.userId)
+      
     } catch (e) { }
+  }
+
+  const regToggler = () => {
+    setRegister(!register)
   }
 
   return (
@@ -48,8 +55,8 @@ export const AuthPage = () => {
       <div className="col s6 offset-s3">
         <h1>Страница входа</h1>
         <div className="card">
-          <div className="card-content white-text">
-            <span className="card-title">Авторизация</span>
+          <div className="card-content">
+            <span className="card-title">{register === true ? "Регистрация" : "Авторизация"}</span>
             <div>
 
               <div className="input-field">
@@ -57,7 +64,6 @@ export const AuthPage = () => {
                   id="email"
                   type="text"
                   name="email"
-                  // value={form.email}
                   onChange={changeHandler}
                 />
                 <label htmlFor="email">Введите email*</label>
@@ -68,7 +74,6 @@ export const AuthPage = () => {
                   id="password"
                   type="password"
                   name="password"
-                  // value={form.password}
                   onChange={changeHandler}
                 />
                 <label htmlFor="password">Введите пароль*</label>
@@ -80,6 +85,7 @@ export const AuthPage = () => {
                   type="text"
                   name="nickName"
                   onChange={changeHandler}
+                  disabled={!register}
                 />
                 <label htmlFor="nickName">Введите ник</label>
               </div>
@@ -90,6 +96,7 @@ export const AuthPage = () => {
                   type="text"
                   name="firstName"
                   onChange={changeHandler}
+                  disabled={!register}
                 />
                 <label htmlFor="firstName">Введите имя</label>
               </div>
@@ -100,27 +107,32 @@ export const AuthPage = () => {
                   type="text"
                   name="lastName"
                   onChange={changeHandler}
+                  disabled={!register}
                 />
                 <label htmlFor="lastName">Введите фамилию</label>
               </div>
 
             </div>
           </div>
+
           <div className="card-action">
-            <button
-              className="btn yellow darken-4 mr-10"
-              onClick={loginHandler}
-              disabled={loading}
-            >
-              Вход
-            </button>
-            <button
-              className="btn blue darken-4"
-              onClick={registerHandler}
-              disabled={loading}
-            >
-              Регистрация
-            </button>
+            <div className="row">
+              <button
+                className="btn blue darken-4 col s4"
+                onClick={register === true ? registerHandler : loginHandler}
+                disabled={loading}
+              >
+                {register === true ? "Зарегистрироваться" : "Войти"}
+              </button>
+              <div className="col s4 offset-s4 right-align">
+                <span
+                  className="reg yellow-text text-darken-4"
+                  onClick={regToggler}
+                >
+                  {register === true ? "Авторизация" : "Регистрация"}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

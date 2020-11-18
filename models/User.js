@@ -6,6 +6,7 @@ const schema = new Schema({
   nickName: {type: String, required: false},
   firstName: {type: String, required: false},
   lastName: {type: String, required: false},
+  role: {type: String, required: false},
   date: { type: Date, default: Date.now }
 })
 

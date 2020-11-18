@@ -1,5 +1,19 @@
 @import "~materialize-css/dist/css/materialize.min.css";
 
+#root {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 100vh;
+}
 .mr-10 {
   margin-right: 10px;
+}
+.logo {
+  position: absolute;
+  transform: translateY(30%)
+}
+.footer {
+  padding: 5px 0;
+  margin-top: auto;
 }

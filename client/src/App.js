@@ -4,6 +4,7 @@ import { useRoutes } from './routes'
 import { useAuth } from './hooks/auth.hook'
 import { AuthContext } from './context/AuthContext'
 import { Navbar } from './components/Navbar'
+import { Footer } from './components/Footer'
 
 import 'materialize-css'
 
@@ -19,6 +20,7 @@ function App() {
         <div className="container">
           {routes}
         </div>
+        <Footer />
       </Router>
     </AuthContext.Provider>
   )

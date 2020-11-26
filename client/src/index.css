@@ -6,10 +6,10 @@
   justify-content: flex-start;
   min-height: 100vh;
 }
-.logo {
+/* .logo {
   position: absolute;
   transform: translateY(30%)
-}
+} */
 .reg {
   line-height: 36px;
   text-decoration: underline;

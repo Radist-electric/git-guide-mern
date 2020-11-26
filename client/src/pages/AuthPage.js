@@ -2,10 +2,10 @@ import React, { useEffect, useState, useContext } from 'react'
 import { useHttp } from '../hooks/http.hook'
 import { useMessage } from '../hooks/message.hook'
 import { AuthContext } from '../context/AuthContext'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { Loader } from '../components/Loader'
 
-export const AuthPage = () => {
+export const AuthPage = (props) => {
   const history = useHistory()
   const auth = useContext(AuthContext)
   const message = useMessage()
@@ -19,6 +19,13 @@ export const AuthPage = () => {
     role: 'user'
   })
   const [register, setRegister] = useState(false)
+  const location = useLocation()
+
+  useEffect(() => {
+    if(location.state) {
+      setRegister(location.state.needAuth)
+    }
+ }, [location]);
 
   useEffect(() => {
     message(error)

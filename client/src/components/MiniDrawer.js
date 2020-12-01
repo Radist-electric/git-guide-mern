@@ -17,13 +17,11 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
-import InboxIcon from '@material-ui/icons/MoveToInbox'
-import MailIcon from '@material-ui/icons/Mail'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import Logo from '../img/header/logo.png'
+import { IconMain, IconCommands, IconInteractive, IconGitHub, IconAbout, IconText } from './Icons'
 
 const drawerWidth = 240
 
@@ -51,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1
+  },
+  link: {
+    color: '#000'
   },
   hide: {
     display: 'none',
@@ -212,32 +213,32 @@ export const MiniDrawer = () => {
         </div>
         <Divider />
         <List>
-          <NavLink to="/">
-            <ListItem button key={1}>
-              <ListItemIcon><MailIcon /></ListItemIcon>
+          <NavLink to="/" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon><IconMain /></ListItemIcon>
               Главная
             </ListItem>
           </NavLink>
-          <NavLink to="/commands">
-            <ListItem button key={2}>
-              <ListItemIcon><MailIcon /></ListItemIcon>
+          <NavLink to="/commands" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon><IconCommands /></ListItemIcon>
               Команды Git
             </ListItem>
           </NavLink>
-          {isAuth && <NavLink to="/interactive"><ListItem button key={3}>
-            <ListItemIcon><MailIcon /></ListItemIcon>
+          {isAuth && <NavLink to="/interactive" className={classes.link}><ListItem button>
+            <ListItemIcon><IconInteractive /></ListItemIcon>
             Интерактив
             </ListItem>
           </NavLink>}
-          <NavLink to="/git">
-            <ListItem button key={4}>
-              <ListItemIcon><MailIcon /></ListItemIcon>
+          <NavLink to="/git" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon><IconGitHub /></ListItemIcon>
               Про Git
             </ListItem>
           </NavLink>
-          <NavLink to="/about">
-            <ListItem button key={5}>
-              <ListItemIcon><MailIcon /></ListItemIcon>
+          <NavLink to="/about" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon><IconAbout /></ListItemIcon>
               О проекте
             </ListItem>
           </NavLink>
@@ -245,12 +246,14 @@ export const MiniDrawer = () => {
 
         <Divider />
         <List>
-          {['Команды', 'Тексты'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem button>
+            <ListItemIcon><IconCommands /></ListItemIcon>
+            Команды
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon><IconText /></ListItemIcon>
+            Тексты
+          </ListItem>
         </List>
       </Drawer>
       <main className={classes.content}>

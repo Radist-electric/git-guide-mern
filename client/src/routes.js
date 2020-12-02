@@ -6,6 +6,7 @@ import { InteractivePage } from './pages/InteractivePage'
 import { GitPage } from './pages/GitPage'
 import { AboutPage } from './pages/AboutPage'
 import { AuthPage } from './pages/AuthPage'
+import { ProfilePage } from './pages/ProfilePage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
 export const useRoutes = isAuthenticated => {
@@ -30,6 +31,9 @@ export const useRoutes = isAuthenticated => {
         </Route>
         <Route exact path="/auth">
           <AuthPage />
+        </Route>
+        <Route exact path="/profile">
+          <ProfilePage />
         </Route>
         <Route exact path="/404">
           <NotFoundPage />

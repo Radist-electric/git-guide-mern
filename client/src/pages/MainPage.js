@@ -1,9 +1,8 @@
-import React from 'react'
-
 export const MainPage = () => {
   return (
     <div>
-      <h1>Main Page</h1>
+      <h1>Главная страница</h1>
+      <p>Эта страница будет заполнена позже</p>
     </div>
   )
 }

@@ -132,6 +132,13 @@ export const MiniDrawer = () => {
     })
   }
 
+  const profileHandler = () => {
+    handleClose()
+    history.push({
+      pathname: '/profile'
+    })
+  }
+
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget)
   }
@@ -192,7 +199,7 @@ export const MiniDrawer = () => {
             >
               {!isAuth && <MenuItem onClick={() => authHandler(false)}>Вход</MenuItem>}
               {!isAuth && <MenuItem onClick={() => authHandler(true)}>Регистрация</MenuItem>}
-              {isAuth && <MenuItem onClick={handleClose}>Личный кабинет</MenuItem>}
+              {isAuth && <MenuItem onClick={() => profileHandler()}>Личный кабинет</MenuItem>}
               {isAuth && <MenuItem onClick={logoutHandler}>Выход</MenuItem>}
             </Menu>
           </div>

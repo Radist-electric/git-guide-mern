@@ -8,11 +8,11 @@ import { Footer } from './components/Footer'
 import 'materialize-css'
 
 function App() {
-  const { token, login, logout, userId } = useAuth()
+  const { token, login, logout, userId, role } = useAuth()
   const isAuthenticated = !!token
 
   return (
-    <AuthContext.Provider value={{ token, login, logout, userId, isAuthenticated }}>
+    <AuthContext.Provider value={{ token, login, logout, userId, role, isAuthenticated }}>
       <Router>
         <MiniDrawer />
         <Footer />

@@ -20,6 +20,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
+import indigo from '@material-ui/core/colors/indigo'
 import Logo from '../img/header/logo.png'
 import { IconMain, IconCommands, IconInteractive, IconGitHub, IconAbout, IconText } from './Icons'
 
@@ -52,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     color: '#000'
+  },
+  active: {
+    backgroundColor: indigo[50]
   },
   hide: {
     display: 'none',
@@ -96,10 +100,11 @@ const useStyles = makeStyles((theme) => ({
 export const MiniDrawer = () => {
   const classes = useStyles()
   const theme = useTheme()
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = useState(false)
   const history = useHistory()
   const auth = useContext(AuthContext)
   const isAuth = auth.isAuthenticated
+  const role = auth.role
   const curPath = useLocation().pathname
   const routes = useRoutes(isAuth)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -214,38 +219,37 @@ export const MiniDrawer = () => {
         <Divider />
         <List>
           <NavLink to="/" className={classes.link}>
-            <ListItem button>
+            <ListItem button className={curPath === '/' ? classes.active : ""}>
               <ListItemIcon><IconMain /></ListItemIcon>
               Главная
             </ListItem>
           </NavLink>
           <NavLink to="/commands" className={classes.link}>
-            <ListItem button>
+            <ListItem button className={curPath === '/commands' ? classes.active : ""}>
               <ListItemIcon><IconCommands /></ListItemIcon>
               Команды Git
             </ListItem>
           </NavLink>
-          {isAuth && <NavLink to="/interactive" className={classes.link}><ListItem button>
+          {isAuth && <NavLink to="/interactive" className={classes.link}><ListItem button className={curPath === '/interactive' ? classes.active : ""}>
             <ListItemIcon><IconInteractive /></ListItemIcon>
             Интерактив
             </ListItem>
           </NavLink>}
           <NavLink to="/git" className={classes.link}>
-            <ListItem button>
+            <ListItem button className={curPath === '/git' ? classes.active : ""}>
               <ListItemIcon><IconGitHub /></ListItemIcon>
               Про Git
             </ListItem>
           </NavLink>
           <NavLink to="/about" className={classes.link}>
-            <ListItem button>
+            <ListItem button className={curPath === '/about' ? classes.active : ""}>
               <ListItemIcon><IconAbout /></ListItemIcon>
               О проекте
             </ListItem>
           </NavLink>
         </List>
-
         <Divider />
-        <List>
+        {isAuth && role === 'admin' && <List>
           <ListItem button>
             <ListItemIcon><IconCommands /></ListItemIcon>
             Команды
@@ -254,7 +258,7 @@ export const MiniDrawer = () => {
             <ListItemIcon><IconText /></ListItemIcon>
             Тексты
           </ListItem>
-        </List>
+        </List>}
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />

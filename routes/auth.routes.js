@@ -83,8 +83,7 @@ router.post(
         config.get('jwtsecret'),
         { expiresIn: '1h' }
       )
-
-      res.json({ token, userId: user.id, message: 'Вы успешно вошли в систему' })
+      res.json({ token, userId: user.id, userRole: user.role, message: 'Вы успешно вошли в систему' })
 
     } catch (e) {
       res.status(500).json({ message: 'Что-то пошло не так. Попробуйте снова.' })

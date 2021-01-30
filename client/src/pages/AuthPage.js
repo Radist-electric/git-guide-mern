@@ -1,16 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useHttp } from '../hooks/http.hook'
-import { useMessage } from '../hooks/message.hook'
 import { AuthContext } from '../context/AuthContext'
 import { useHistory, useLocation } from 'react-router-dom'
 import { Loader } from '../components/Loader'
 import { connect } from 'react-redux'
 
 export const AuthPage = (props) => {
-  // console.log('AuthPage props: ', props)
   const history = useHistory()
   const auth = useContext(AuthContext)
-  const message = useMessage()
   const { loading, error, request, clearError } = useHttp()
   const [form, setForm] = useState({
     email: '',
@@ -30,13 +27,11 @@ export const AuthPage = (props) => {
   }, [location]);
 
   useEffect(() => {
-    message(error)
-    console.log('Auth useEffect: ', props);
     if(error) {
       props.showAll(error, 'error', 'top', 'center')
     }
     clearError()
-  }, [error, message, clearError, props])
+  }, [error, clearError, props])
 
   useEffect(() => {
     window.M.updateTextFields()
@@ -49,11 +44,9 @@ export const AuthPage = (props) => {
   const registerHandler = async () => {
     try {
       const data = await request('/api/auth/register', 'POST', { ...form })
-      message(data.message)
       props.showAll(data.message, 'success', 'top', 'center')
       setRegister(false)
       setTimeout(() => {
-        message('Войдите в систему')
         props.showAll('Войдите в систему', 'success', 'top', 'center')
       }, 3200)
     } catch (e) { }
@@ -62,7 +55,6 @@ export const AuthPage = (props) => {
   const loginHandler = async () => {
     try {
       const data = await request('/api/auth/login', 'POST', { ...form })
-      message(data.message)
       props.showAll(data.message, 'success', 'top', 'center')
       auth.login(data.token, data.userId, data.userRole)
       if (history.length > 2) {

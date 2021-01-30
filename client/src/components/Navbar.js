@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react'
 import { NavLink, useHistory, useLocation } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
 import Logo from '../img/header/logo.png'
-
 import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'

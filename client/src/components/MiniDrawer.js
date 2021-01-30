@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react'
+import { connect } from 'react-redux'
 import clsx from 'clsx'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import { NavLink, useHistory, useLocation } from 'react-router-dom'
@@ -97,7 +98,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export const MiniDrawer = () => {
+export const MiniDrawer = (props) => {
+  // console.log('MiniDrawer props: ', props)
   const classes = useStyles()
   const theme = useTheme()
   const [open, setOpen] = useState(false)
@@ -120,6 +122,7 @@ export const MiniDrawer = () => {
 
   const logoutHandler = () => {
     handleClose()
+    props.showAll('Вы вышли из системы', 'info', 'top', 'center')
     auth.logout()
     history.push('/auth')
   }
@@ -274,3 +277,22 @@ export const MiniDrawer = () => {
     </div>
   )
 }
+
+function mapStateToProps(state) {
+  return {
+    text: state.text,
+    typeText: state.typeText,
+    vertical: state.vertical,
+    horizontal: state.horizontal
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    show: (text, typeText) => dispatch({ type: 'SHOW', payload: {text, typeText} }),
+    showAll: (text, typeText, vertical, horizontal) => dispatch({ type: 'SHOW', payload: {text, typeText, vertical, horizontal} }),
+    hide: () => dispatch({ type: 'HIDE' })
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MiniDrawer)

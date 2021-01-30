@@ -5,7 +5,7 @@ import { CommandsPage } from './pages/CommandsPage'
 import { InteractivePage } from './pages/InteractivePage'
 import { GitPage } from './pages/GitPage'
 import { AboutPage } from './pages/AboutPage'
-import { AuthPage } from './pages/AuthPage'
+import AuthPage from './pages/AuthPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { NotFoundPage } from './pages/NotFoundPage'
 

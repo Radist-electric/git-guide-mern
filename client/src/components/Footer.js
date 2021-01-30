@@ -12,6 +12,7 @@ const useStyles = makeStyles(() => ({
 
 export const Footer = () => {
   const classes = useStyles()
+
   return (
     <Box className={classes.root} bgcolor="primary.main">
       <Container>

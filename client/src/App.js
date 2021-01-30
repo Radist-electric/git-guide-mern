@@ -2,8 +2,9 @@ import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { useAuth } from './hooks/auth.hook'
 import { AuthContext } from './context/AuthContext'
-import { MiniDrawer } from './components/MiniDrawer'
+import MiniDrawer from './components/MiniDrawer'
 import { Footer } from './components/Footer'
+import PopupMessage from './components/Popup'
 
 import 'materialize-css'
 
@@ -16,6 +17,7 @@ function App() {
       <Router>
         <MiniDrawer />
         <Footer />
+        <PopupMessage />
       </Router>
     </AuthContext.Provider>
   )

@@ -4,8 +4,10 @@ import { useMessage } from '../hooks/message.hook'
 import { AuthContext } from '../context/AuthContext'
 import { useHistory, useLocation } from 'react-router-dom'
 import { Loader } from '../components/Loader'
+import { connect } from 'react-redux'
 
 export const AuthPage = (props) => {
+  // console.log('AuthPage props: ', props)
   const history = useHistory()
   const auth = useContext(AuthContext)
   const message = useMessage()
@@ -22,15 +24,19 @@ export const AuthPage = (props) => {
   const location = useLocation()
 
   useEffect(() => {
-    if(location.state) {
+    if (location.state) {
       setRegister(location.state.needAuth)
     }
- }, [location]);
+  }, [location]);
 
   useEffect(() => {
     message(error)
+    console.log('Auth useEffect: ', props);
+    if(error) {
+      props.showAll(error, 'error', 'top', 'center')
+    }
     clearError()
-  }, [error, message, clearError])
+  }, [error, message, clearError, props])
 
   useEffect(() => {
     window.M.updateTextFields()
@@ -44,10 +50,12 @@ export const AuthPage = (props) => {
     try {
       const data = await request('/api/auth/register', 'POST', { ...form })
       message(data.message)
+      props.showAll(data.message, 'success', 'top', 'center')
       setRegister(false)
       setTimeout(() => {
         message('Войдите в систему')
-      }, 1000)
+        props.showAll('Войдите в систему', 'success', 'top', 'center')
+      }, 3200)
     } catch (e) { }
   }
 
@@ -55,6 +63,7 @@ export const AuthPage = (props) => {
     try {
       const data = await request('/api/auth/login', 'POST', { ...form })
       message(data.message)
+      props.showAll(data.message, 'success', 'top', 'center')
       auth.login(data.token, data.userId, data.userRole)
       if (history.length > 2) {
         history.goBack()
@@ -173,3 +182,22 @@ export const AuthPage = (props) => {
     </div>
   )
 }
+
+function mapStateToProps(state) {
+  return {
+    text: state.text,
+    typeText: state.typeText,
+    vertical: state.vertical,
+    horizontal: state.horizontal
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    show: (text, typeText) => dispatch({ type: 'SHOW', payload: { text, typeText } }),
+    showAll: (text, typeText, vertical, horizontal) => dispatch({ type: 'SHOW', payload: { text, typeText, vertical, horizontal } }),
+    hide: () => dispatch({ type: 'HIDE' })
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthPage)

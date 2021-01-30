@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { useHttp } from '../hooks/http.hook'
 import { AuthContext } from '../context/AuthContext'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -28,7 +28,7 @@ export const AuthPage = (props) => {
 
   useEffect(() => {
     if(error) {
-      props.showAll(error, 'error', 'top', 'center')
+      props.show(error, 'error', 'top', 'center')
     }
     clearError()
   }, [error, clearError, props])
@@ -44,10 +44,10 @@ export const AuthPage = (props) => {
   const registerHandler = async () => {
     try {
       const data = await request('/api/auth/register', 'POST', { ...form })
-      props.showAll(data.message, 'success', 'top', 'center')
+      props.show(data.message, 'success', 'top', 'center')
       setRegister(false)
       setTimeout(() => {
-        props.showAll('Войдите в систему', 'success', 'top', 'center')
+        props.show('Войдите в систему', 'success', 'top', 'center')
       }, 3200)
     } catch (e) { }
   }
@@ -55,7 +55,7 @@ export const AuthPage = (props) => {
   const loginHandler = async () => {
     try {
       const data = await request('/api/auth/login', 'POST', { ...form })
-      props.showAll(data.message, 'success', 'top', 'center')
+      props.show(data.message, 'success', 'top', 'center')
       auth.login(data.token, data.userId, data.userRole)
       if (history.length > 2) {
         history.goBack()
@@ -180,15 +180,13 @@ function mapStateToProps(state) {
     text: state.text,
     typeText: state.typeText,
     vertical: state.vertical,
-    horizontal: state.horizontal
+    useState: state.horizontal
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    show: (text, typeText) => dispatch({ type: 'SHOW', payload: { text, typeText } }),
-    showAll: (text, typeText, vertical, horizontal) => dispatch({ type: 'SHOW', payload: { text, typeText, vertical, horizontal } }),
-    hide: () => dispatch({ type: 'HIDE' })
+    show: (text, typeText, vertical, horizontal) => dispatch({ type: 'SHOW', payload: { text, typeText, vertical, horizontal } }),
   }
 }
 

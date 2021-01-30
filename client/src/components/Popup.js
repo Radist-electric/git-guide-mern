@@ -22,8 +22,6 @@ export const PopupMessage = (props) => {
           {props.text}
         </Alert>
       </Snackbar>
-      {/* <button onClick={() => props.showAll('My test text', 'success', 'top', 'center')}>Изменить текст</button>
-      <button onClick={() => props.show('Special text', 'error')}>Изменить текст</button> */}
     </>
   )
 }
@@ -40,8 +38,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    show: (text, typeText) => dispatch({ type: 'SHOW', payload: { text, typeText } }),
-    showAll: (text, typeText, vertical, horizontal) => dispatch({ type: 'SHOW', payload: { text, typeText, vertical, horizontal } }),
     hide: () => dispatch({ type: 'HIDE' })
   }
 }

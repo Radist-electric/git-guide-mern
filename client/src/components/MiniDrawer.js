@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import { connect } from 'react-redux'
 import clsx from 'clsx'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
@@ -99,7 +99,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const MiniDrawer = (props) => {
-  // console.log('MiniDrawer props: ', props)
   const classes = useStyles()
   const theme = useTheme()
   const [open, setOpen] = useState(false)
@@ -122,7 +121,7 @@ export const MiniDrawer = (props) => {
 
   const logoutHandler = () => {
     handleClose()
-    props.showAll('Вы вышли из системы', 'info', 'top', 'center')
+    props.show('Вы вышли из системы', 'info', 'top', 'center')
     auth.logout()
     history.push('/auth')
   }
@@ -289,9 +288,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    show: (text, typeText) => dispatch({ type: 'SHOW', payload: {text, typeText} }),
-    showAll: (text, typeText, vertical, horizontal) => dispatch({ type: 'SHOW', payload: {text, typeText, vertical, horizontal} }),
-    hide: () => dispatch({ type: 'HIDE' })
+    show: (text, typeText, vertical, horizontal) => dispatch({ type: 'SHOW', payload: {text, typeText, vertical, horizontal} }),
   }
 }
 

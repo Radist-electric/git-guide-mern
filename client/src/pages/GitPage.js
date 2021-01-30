@@ -1,5 +1,4 @@
-import React from 'react'
-// import { Col, Row } from 'reactstrap'
+import { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Accordion from '@material-ui/core/Accordion'
@@ -97,7 +96,7 @@ export const GitPage = () => {
 
   const classes = useStyles()
 
-  const [activeStep, setActiveStep] = React.useState(0)
+  const [activeStep, setActiveStep] = useState(0)
   const steps = getSteps()
 
   const handleNext = () => {

@@ -4,10 +4,12 @@
   "description": "This web application generates commands for Git",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "cross-env NODE_ENV=production node app.js",
     "server": "nodemon app.js",
     "client": "npm run start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "client:install": "npm install --prefix client",
+    "client:build": "npm run build --prefix client",
+    "dev": "cross-env NODE_ENV=development concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
@@ -28,10 +30,9 @@
   },
   "homepage": "https://github.com/Radist-electric/git-guide-mern#readme",
   "dependencies": {
-    "@material-ui/core": "^4.11.1",
-    "@material-ui/icons": "^4.9.1",
     "bcrypt": "^5.0.0",
     "config": "^3.3.2",
+    "cross-env": "^7.0.3",
     "express": "^4.17.1",
     "express-validator": "^6.6.1",
     "jsonwebtoken": "^8.5.1",

@@ -4,8 +4,32 @@ import { AuthContext } from '../context/AuthContext'
 import { useHistory, useLocation } from 'react-router-dom'
 import { Loader } from '../components/Loader'
 import { connect } from 'react-redux'
+import { makeStyles } from '@material-ui/core/styles'
+import Paper from '@material-ui/core/Paper'
+import Grid from '@material-ui/core/Grid'
+import Button from '@material-ui/core/Button'
+import TextField from '@material-ui/core/TextField'
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    position: 'relative',
+    padding: theme.spacing(2),
+    margin: 'auto',
+    maxWidth: 576,
+  },
+  buttons: {
+    marginTop: '20px'
+  },
+  bgNone: {
+    background: 'none'
+  }
+}))
 
 export const AuthPage = (props) => {
+  const classes = useStyles()
   const history = useHistory()
   const auth = useContext(AuthContext)
   const { loading, error, request, clearError } = useHttp()
@@ -27,15 +51,11 @@ export const AuthPage = (props) => {
   }, [location]);
 
   useEffect(() => {
-    if(error) {
+    if (error) {
       props.show(error, 'error', 'top', 'center')
     }
     clearError()
   }, [error, clearError, props])
-
-  useEffect(() => {
-    window.M.updateTextFields()
-  }, [])
 
   const changeHandler = event => {
     setForm({ ...form, [event.target.name]: event.target.value })
@@ -80,97 +100,94 @@ export const AuthPage = (props) => {
   }
 
   return (
-    <div className="row">
-      <h1 className="center-align">Вход / регистрация</h1>
-      <div className="col xl6 offset-xl3 l8 offset-l2 s12">
-        <div className="card">
-          <div className="card-content">
-            <span className="card-title">{register === true ? "Регистрация" : "Авторизация"}</span>
-            <div>
+    <div className={classes.root}>
+      <Paper className={classes.paper + ' ' + classes.bgNone} elevation={0}>
+        <h1>Вход / регистрация</h1>
+      </Paper>
+      <Paper className={classes.paper} elevation={3}>
+        <h2 className='card-title'>{register === true ? 'Регистрация' : 'Авторизация'}</h2>
+        <TextField
+          id='email'
+          type='text'
+          name='email'
+          required
+          autoFocus={true}
+          fullWidth={true}
+          margin='normal'
+          onChange={changeHandler}
+          onKeyPress={pressHandler}
+          label='Введите email'
+        />
+        <TextField
+          id='password'
+          type='password'
+          name='password'
+          required
+          fullWidth={true}
+          margin='normal'
+          onChange={changeHandler}
+          onKeyPress={pressHandler}
+          label='Введите пароль'
+        />
+        <TextField
+          id='nickName'
+          type='text'
+          name='nickName'
+          fullWidth={true}
+          margin='normal'
+          onChange={changeHandler}
+          disabled={!register}
+          onKeyPress={pressHandler}
+          label='Введите ник'
+        />
+        <TextField
+          id='firstName'
+          type='text'
+          name='firstName'
+          fullWidth={true}
+          margin='normal'
+          onChange={changeHandler}
+          disabled={!register}
+          onKeyPress={pressHandler}
+          label='Введите имя'
+        />
+        <TextField
+          id='lastName'
+          type='text'
+          name='lastName'
+          fullWidth={true}
+          margin='normal'
+          onChange={changeHandler}
+          disabled={!register}
+          onKeyPress={pressHandler}
+          label='Введите фамилию'
+        />
 
-              <div className="input-field">
-                <input
-                  id="email"
-                  type="text"
-                  name="email"
-                  onChange={changeHandler}
-                  onKeyPress={pressHandler}
-                />
-                <label htmlFor="email">Введите email*</label>
-              </div>
 
-              <div className="input-field">
-                <input
-                  id="password"
-                  type="password"
-                  name="password"
-                  onChange={changeHandler}
-                  onKeyPress={pressHandler}
-                />
-                <label htmlFor="password">Введите пароль*</label>
-              </div>
-
-              <div className="input-field">
-                <input
-                  id="nickName"
-                  type="text"
-                  name="nickName"
-                  onChange={changeHandler}
-                  disabled={!register}
-                  onKeyPress={pressHandler}
-                />
-                <label htmlFor="nickName">Введите ник</label>
-              </div>
-
-              <div className="input-field">
-                <input
-                  id="firstName"
-                  type="text"
-                  name="firstName"
-                  onChange={changeHandler}
-                  disabled={!register}
-                  onKeyPress={pressHandler}
-                />
-                <label htmlFor="firstName">Введите имя</label>
-              </div>
-
-              <div className="input-field">
-                <input
-                  id="lastName"
-                  type="text"
-                  name="lastName"
-                  onChange={changeHandler}
-                  disabled={!register}
-                  onKeyPress={pressHandler}
-                />
-                <label htmlFor="lastName">Введите фамилию</label>
-              </div>
-
-            </div>
-          </div>
-
-          <div className="card-action">
-            <div className="row">
-              <button
-                className="btn blue darken-4 col m6 s12"
-                onClick={register === true ? registerHandler : loginHandler}
-                disabled={loading}
-              >
-                {register === true ? "Зарегистрироваться" : "Войти"}
-              </button>
-              <div className="col m1 offset-m1 s1 offset-s5">{loading && <Loader />}</div>
-              <div className="col m3 offset-m1 s5 offset-s1 right-align">
-                <span
-                  className="reg yellow-text text-darken-4"
-                  onClick={regToggler}
-                >
-                  {register === true ? "Авторизация" : "Регистрация"}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        <Grid container spacing={3} className={classes.buttons}>
+          <Grid item xs={12} sm={6}>
+            <Button
+              variant='contained'
+              color='primary'
+              disabled={loading}
+              fullWidth={true}
+              onClick={register === true ? registerHandler : loginHandler}
+            >
+              {register === true ? 'Зарегистрироваться' : 'Войти'}
+            </Button>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Button
+              color='secondary'
+              fullWidth={true}
+              onClick={regToggler}
+            >
+              {register === true ? 'Авторизация' : 'Регистрация'}
+            </Button>
+          </Grid>
+        </Grid>
+        {loading && <Loader />}
+      </Paper>
     </div>
   )
 }

@@ -1,26 +1,6 @@
-@import "~materialize-css/dist/css/materialize.min.css";
-
 #root {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   min-height: 100vh;
-}
-
-.reg {
-  line-height: 36px;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-@media only screen and (max-width: 991px) {
-  html {
-    font-size: 13px;
-  }
-}
-
-@media only screen and (max-width: 600px) {
-  html {
-    font-size: 12px;
-  }
 }

@@ -5,8 +5,6 @@ import MiniDrawer from './components/MiniDrawer'
 import { Footer } from './components/Footer'
 import PopupMessage from './components/Popup'
 
-import 'materialize-css'
-
 function App() {
   const { token, login, logout, userId, role } = useAuth()
   const isAuthenticated = !!token

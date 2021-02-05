@@ -1,22 +1,8 @@
-const initialState = {
-  text: 'Приложение запущено',
-  typeText: 'info',
-  vertical: 'top',
-  horizontal: 'center',
-  open: true
-}
+import {combineReducers} from 'redux'
 
-export default function rootReducer(state = initialState, action) {
-  switch(action.type) {
-    case 'SHOW':
-      return {
-        ...initialState, ...action.payload, open: true
-      }
-      case 'HIDE':
-        return {
-          ...state, text: null, open: false
-        }
-    default: return state
-  }
+import popup from './reducers/popup'
+import authForm from './reducers/authForm'
 
-}
+export default combineReducers({
+  popup, authForm
+})

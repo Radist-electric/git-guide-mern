@@ -33,14 +33,6 @@ export const AuthPage = (props) => {
   const history = useHistory()
   const auth = useContext(AuthContext)
   const { loading, error, request, clearError } = useHttp()
-  const [form, setForm] = useState({
-    email: '',
-    password: '',
-    nickName: '',
-    firstName: '',
-    lastName: '',
-    role: 'user'
-  })
   const [register, setRegister] = useState(false)
   const location = useLocation()
 
@@ -58,12 +50,12 @@ export const AuthPage = (props) => {
   }, [error, clearError, props])
 
   const changeHandler = event => {
-    setForm({ ...form, [event.target.name]: event.target.value })
+    props.changeForm({ ...props.form, [event.target.name]: event.target.value })
   }
 
   const registerHandler = async () => {
     try {
-      const data = await request('/api/auth/register', 'POST', { ...form })
+      const data = await request('/api/auth/register', 'POST', { ...props.form })
       props.show(data.message, 'success', 'top', 'center')
       setRegister(false)
       setTimeout(() => {
@@ -74,7 +66,7 @@ export const AuthPage = (props) => {
 
   const loginHandler = async () => {
     try {
-      const data = await request('/api/auth/login', 'POST', { ...form })
+      const data = await request('/api/auth/login', 'POST', { ...props.form })
       props.show(data.message, 'success', 'top', 'center')
       auth.login(data.token, data.userId, data.userRole)
       if (history.length > 2) {
@@ -194,16 +186,18 @@ export const AuthPage = (props) => {
 
 function mapStateToProps(state) {
   return {
-    text: state.text,
-    typeText: state.typeText,
-    vertical: state.vertical,
-    useState: state.horizontal
+    text: state.popup.text,
+    typeText: state.popup.typeText,
+    vertical: state.popup.vertical,
+    useState: state.popup.horizontal,
+    form: state.authForm.form
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     show: (text, typeText, vertical, horizontal) => dispatch({ type: 'SHOW', payload: { text, typeText, vertical, horizontal } }),
+    changeForm: (form) => dispatch({type: 'CHANGE_FORM', payload: form})
   }
 }
 

@@ -15,6 +15,8 @@ export default function authForm(state = initialState, action) {
       return {
         form: {...action.payload}
       }
+    case 'INIT_FORM':
+      return {...initialState}
     default: return state
   }
 }

@@ -21,12 +21,12 @@ const initialState = {
       type: 'password',
       name: 'password',
       label: 'Введите пароль',
-      errorMessage: 'Введите корректный пароль',
+      errorMessage: 'Минимальная длина пароля 8 символов и минимум 1 цифра',
       valid: false,
       touched: false,
       validation: {
         required: true,
-        minLength: 6
+        minLength: 8
       }
     },
     nickName: {
@@ -35,7 +35,7 @@ const initialState = {
       type: 'text',
       name: 'nickName',
       label: 'Введите ник',
-      valid: false,
+      valid: true,
       touched: false,
     },
     firstName: {
@@ -44,7 +44,7 @@ const initialState = {
       type: 'text',
       name: 'firstName',
       label: 'Введите имя',
-      valid: false,
+      valid: true,
       touched: false,
     },
     lastName: {
@@ -53,7 +53,7 @@ const initialState = {
       type: 'text',
       name: 'lastName',
       label: 'Введите фамилию',
-      valid: false,
+      valid: true,
       touched: false,
     }
   }
@@ -61,14 +61,13 @@ const initialState = {
 
 export default function authValid(state = initialState, action) {
   switch (action.type) {
-    case 'VALID1':
+    case 'CHANGE_FORMCONTROLS':
       return {
-
+        formControls: { ...action.payload.formControls },
+        isFormValid: action.payload.isFormValid
       }
-    case 'VALID2':
-      return {
-
-      }
+    case 'INIT_FORMCONTROLS':
+      return {...initialState}
     default: return state
   }
 }

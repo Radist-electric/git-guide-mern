@@ -28,11 +28,11 @@ export const PopupMessage = (props) => {
 
 function mapStateToProps(state) {
   return {
-    text: state.popup.text,
-    typeText: state.popup.typeText,
-    vertical: state.popup.vertical,
-    horizontal: state.popup.horizontal,
-    open: state.popup.open
+    text: state.popup.popup.text,
+    typeText: state.popup.popup.typeText,
+    vertical: state.popup.popup.vertical,
+    horizontal: state.popup.popup.horizontal,
+    open: state.popup.popup.open
   }
 }
 

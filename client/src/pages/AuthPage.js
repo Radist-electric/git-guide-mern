@@ -186,10 +186,10 @@ export const AuthPage = (props) => {
 
 function mapStateToProps(state) {
   return {
-    text: state.popup.text,
-    typeText: state.popup.typeText,
-    vertical: state.popup.vertical,
-    useState: state.popup.horizontal,
+    text: state.popup.popup.text,
+    typeText: state.popup.popup.typeText,
+    vertical: state.popup.popup.vertical,
+    useState: state.popup.popup.horizontal,
     form: state.authForm.form
   }
 }

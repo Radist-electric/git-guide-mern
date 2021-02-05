@@ -279,10 +279,10 @@ export const MiniDrawer = (props) => {
 
 function mapStateToProps(state) {
   return {
-    text: state.popup.text,
-    typeText: state.popup.typeText,
-    vertical: state.popup.vertical,
-    horizontal: state.popup.horizontal
+    text: state.popup.popup.text,
+    typeText: state.popup.popup.typeText,
+    vertical: state.popup.popup.vertical,
+    horizontal: state.popup.popup.horizontal
   }
 }
 

@@ -1,21 +1,25 @@
 const initialState = {
-  text: 'Приложение запущено',
-  typeText: 'info',
-  vertical: 'top',
-  horizontal: 'center',
-  open: true
+  popup: {
+    text: 'Приложение запущено',
+    typeText: 'info',
+    vertical: 'top',
+    horizontal: 'center',
+    open: true
+  }
 }
 
 export default function popup(state = initialState, action) {
-  switch(action.type) {
+  switch (action.type) {
     case 'SHOW':
       return {
-        ...initialState, ...action.payload, open: true
-      }
-      case 'HIDE':
-        return {
-          ...state, text: null, open: false
+        popup: {
+          ...initialState, ...action.payload, open: true
         }
+      }
+    case 'HIDE':
+      return {
+        popup: {...state.popup, text: null, open: false}
+      }
     default: return state
   }
 }

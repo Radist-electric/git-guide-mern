@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { useHttp } from '../hooks/http.hook'
 import { AuthContext } from '../context/AuthContext'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -34,18 +34,18 @@ export const AuthPage = (props) => {
   const history = useHistory()
   const auth = useContext(AuthContext)
   const { loading, error, request, clearError } = useHttp()
-  const [register, setRegister] = useState(false)
   const location = useLocation()
+  const {changeRegister} = props
 
   useEffect(() => {
     if (location.state) {
-      setRegister(location.state.needAuth)
+       changeRegister(location.state.needAuth)
     }
-  }, [location]);
+  }, [location, changeRegister])
 
   useEffect(() => {
     if (error) {
-      props.show(error, 'error', 'top', 'center')
+      props.showPopup(error, 'error')
     }
     clearError()
   }, [error, clearError, props])
@@ -53,11 +53,11 @@ export const AuthPage = (props) => {
   const registerHandler = async () => {
     try {
       const data = await request('/api/auth/register', 'POST', { ...props.form })
-      props.show(data.message, 'success', 'top', 'center')
-      setRegister(false)
+      props.showPopup(data.message, 'success')
+      changeRegister(false)
       initInputs()
       setTimeout(() => {
-        props.show('Войдите в систему', 'success', 'top', 'center')
+        props.showPopup('Войдите в систему', 'info')
       }, 3200)
     } catch (e) { }
   }
@@ -65,7 +65,7 @@ export const AuthPage = (props) => {
   const loginHandler = async () => {
     try {
       const data = await request('/api/auth/login', 'POST', { ...props.form })
-      props.show(data.message, 'success', 'top', 'center')
+      props.showPopup(data.message, 'success')
       auth.login(data.token, data.userId, data.userRole)
       initInputs()
       if (history.length > 2) {
@@ -77,12 +77,12 @@ export const AuthPage = (props) => {
   }
 
   const regToggler = () => {
-    setRegister(!register)
+    changeRegister(!props.register)
   }
 
   const pressHandler = event => {
     if (event.key === 'Enter') {
-      if (register === true) {
+      if (props.register === true) {
         registerHandler()
       } else {
         loginHandler()
@@ -165,7 +165,7 @@ export const AuthPage = (props) => {
         <h1>Вход / регистрация</h1>
       </Paper>
       <Paper className={classes.paper} elevation={3}>
-        <h2 className='card-title'>{register === true ? 'Регистрация' : 'Авторизация'}</h2>
+        <h2 className='card-title'>{props.register === true ? 'Регистрация' : 'Авторизация'}</h2>
         {renderInputs()}
         <Grid container spacing={3} className={classes.buttons}>
           <Grid item xs={12} sm={6}>
@@ -174,9 +174,9 @@ export const AuthPage = (props) => {
               color='primary'
               disabled={loading || !props.isFormValid}
               fullWidth={true}
-              onClick={register === true ? registerHandler : loginHandler}
+              onClick={props.register === true ? registerHandler : loginHandler}
             >
-              {register === true ? 'Зарегистрироваться' : 'Войти'}
+              {props.register === true ? 'Зарегистрироваться' : 'Войти'}
             </Button>
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -185,7 +185,7 @@ export const AuthPage = (props) => {
               fullWidth={true}
               onClick={regToggler}
             >
-              {register === true ? 'Авторизация' : 'Регистрация'}
+              {props.register === true ? 'Авторизация' : 'Регистрация'}
             </Button>
           </Grid>
         </Grid>
@@ -197,23 +197,21 @@ export const AuthPage = (props) => {
 
 function mapStateToProps(state) {
   return {
-    text: state.popup.popup.text,
-    typeText: state.popup.popup.typeText,
-    vertical: state.popup.popup.vertical,
-    useState: state.popup.popup.horizontal,
     form: state.authForm.form,
     isFormValid: state.authValid.isFormValid,
-    formControls: state.authValid.formControls
+    formControls: state.authValid.formControls,
+    register: state.authRegister.register
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    show: (text, typeText, vertical, horizontal) => dispatch({ type: 'SHOW', payload: { text, typeText, vertical, horizontal } }),
+    showPopup: (text, typeText) => dispatch({ type: 'SHOW', payload: { text, typeText } }),
     changeForm: (form) => dispatch({ type: 'CHANGE_FORM', payload: form }),
     initForm: () => dispatch({ type: 'INIT_FORM' }),
     changeformControls: (formControls, isFormValid) => dispatch({ type: 'CHANGE_FORMCONTROLS', payload: { formControls, isFormValid } }),
     initFormControls: () => dispatch({ type: 'INIT_FORMCONTROLS' }),
+    changeRegister: (value) => dispatch({ type: 'CHANGE_REGISTER', payload: {value} })
   }
 }
 

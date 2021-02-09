@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import { connect } from 'react-redux'
 import clsx from 'clsx'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
@@ -53,7 +53,8 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1
   },
   link: {
-    color: '#000'
+    color: '#000',
+    textDecoration: 'none'
   },
   active: {
     backgroundColor: indigo[50]
@@ -101,33 +102,31 @@ const useStyles = makeStyles((theme) => ({
 export const MiniDrawer = (props) => {
   const classes = useStyles()
   const theme = useTheme()
-  const [open, setOpen] = useState(false)
   const history = useHistory()
   const auth = useContext(AuthContext)
   const isAuth = auth.isAuthenticated
   const role = auth.role
   const curPath = useLocation().pathname
   const routes = useRoutes(isAuth)
-  const [anchorEl, setAnchorEl] = useState(null)
-  const openUser = Boolean(anchorEl)
+  const openUser = Boolean(props.anchorEl)
 
   const handleDrawerOpen = () => {
-    setOpen(true)
+    props.openDrawer()
   }
 
   const handleDrawerClose = () => {
-    setOpen(false);
+    props.closeDrawer()
   }
 
   const logoutHandler = () => {
-    handleClose()
-    props.show('Вы вышли из системы', 'info', 'top', 'center')
+    handleMenuClose()
+    props.showPopup('Вы вышли из системы')
     auth.logout()
     history.push('/auth')
   }
 
   const authHandler = (needAuth) => {
-    handleClose()
+    handleMenuClose()
     history.push({
       pathname: '/auth',
       state: { needAuth }
@@ -135,18 +134,18 @@ export const MiniDrawer = (props) => {
   }
 
   const profileHandler = () => {
-    handleClose()
+    handleMenuClose()
     history.push({
       pathname: '/profile'
     })
   }
 
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget)
+  const handleMenuOpen = (event) => {
+    props.openMenu(event.currentTarget)
   }
 
-  const handleClose = () => {
-    setAnchorEl(null)
+  const handleMenuClose = () => {
+    props.closeMenu()
   }
 
 
@@ -156,7 +155,7 @@ export const MiniDrawer = (props) => {
       <AppBar
         position="fixed"
         className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
+          [classes.appBarShift]: props.open,
         })}
       >
         <Toolbar>
@@ -166,7 +165,7 @@ export const MiniDrawer = (props) => {
             onClick={handleDrawerOpen}
             edge="start"
             className={clsx(classes.menuButton, {
-              [classes.hide]: open,
+              [classes.hide]: props.open,
             })}
           >
             <MenuIcon />
@@ -179,14 +178,14 @@ export const MiniDrawer = (props) => {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              onClick={handleMenu}
+              onClick={handleMenuOpen}
               color="inherit"
             >
               <AccountCircle />
             </IconButton>
             <Menu
               id="menu-appbar"
-              anchorEl={anchorEl}
+              anchorEl={props.anchorEl}
               anchorOrigin={{
                 vertical: 'top',
                 horizontal: 'right',
@@ -197,7 +196,7 @@ export const MiniDrawer = (props) => {
                 horizontal: 'right',
               }}
               open={openUser}
-              onClose={handleClose}
+              onClose={handleMenuClose}
             >
               {!isAuth && <MenuItem onClick={() => authHandler(false)}>Вход</MenuItem>}
               {!isAuth && <MenuItem onClick={() => authHandler(true)}>Регистрация</MenuItem>}
@@ -210,13 +209,13 @@ export const MiniDrawer = (props) => {
       <Drawer
         variant="permanent"
         className={clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
+          [classes.drawerOpen]: props.open,
+          [classes.drawerClose]: !props.open,
         })}
         classes={{
           paper: clsx({
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
+            [classes.drawerOpen]: props.open,
+            [classes.drawerClose]: !props.open,
           }),
         }}
       >
@@ -279,16 +278,18 @@ export const MiniDrawer = (props) => {
 
 function mapStateToProps(state) {
   return {
-    text: state.popup.popup.text,
-    typeText: state.popup.popup.typeText,
-    vertical: state.popup.popup.vertical,
-    horizontal: state.popup.popup.horizontal
+    open: state.miniDrawer.drawer.open,
+    anchorEl: state.miniDrawer.drawer.anchorEl
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    show: (text, typeText, vertical, horizontal) => dispatch({ type: 'SHOW', payload: {text, typeText, vertical, horizontal} }),
+    showPopup: (text) => dispatch({ type: 'SHOW', payload: {text} }),
+    openDrawer: () => dispatch({type: 'OPEN_DRAWER'}),
+    closeDrawer: () => dispatch({type: 'CLOSE_DRAWER'}),
+    openMenu: (event) => dispatch({type: 'OPEN_MENU', payload: {event}}),
+    closeMenu: () => dispatch({type: 'CLOSE_MENU'}),
   }
 }
 

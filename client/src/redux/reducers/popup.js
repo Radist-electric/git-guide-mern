@@ -13,7 +13,7 @@ export default function popup(state = initialState, action) {
     case 'SHOW':
       return {
         popup: {
-          ...initialState, ...action.payload, open: true
+          ...initialState.popup, ...action.payload, open: true
         }
       }
     case 'HIDE':

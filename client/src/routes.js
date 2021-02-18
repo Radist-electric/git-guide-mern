@@ -28,9 +28,6 @@ export const useRoutes = isAuthenticated => {
         <Route exact path="/about">
           <AboutPage />
         </Route>
-        <Route exact path="/auth">
-          <AuthPage />
-        </Route>
         <Route exact path="/profile">
           <ProfilePage />
         </Route>
@@ -60,6 +57,9 @@ export const useRoutes = isAuthenticated => {
       </Route>
       <Route exact path="/auth">
         <AuthPage />
+      </Route>
+      <Route exact path="/profile">
+        <Redirect to="/auth" />
       </Route>
       <Route exact path="/404">
         <NotFoundPage />

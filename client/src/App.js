@@ -6,11 +6,11 @@ import { Footer } from './components/Footer'
 import PopupMessage from './components/Popup'
 
 function App() {
-  const { token, login, logout, userId, role } = useAuth()
+  const { token, login, logout, userId, ready, role, userNickName, userFirstName, userLastName } = useAuth()
   const isAuthenticated = !!token
 
   return (
-    <AuthContext.Provider value={{ token, login, logout, userId, role, isAuthenticated }}>
+    <AuthContext.Provider value={{ token, login, logout, userId, ready, role, userNickName, userFirstName, userLastName, isAuthenticated }}>
       <Router>
         <MiniDrawer />
         <Footer />

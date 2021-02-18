@@ -66,7 +66,7 @@ export const AuthPage = (props) => {
     try {
       const data = await request('/api/auth/login', 'POST', { ...props.form })
       props.showPopup(data.message, 'success')
-      auth.login(data.token, data.userId, data.userRole)
+      auth.login(data.token, data.userId, data.userRole, data.userNickName, data.userFirstName, data.userLastName)
       initInputs()
       if (history.length > 2) {
         history.goBack()

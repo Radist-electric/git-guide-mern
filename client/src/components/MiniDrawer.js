@@ -5,6 +5,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles'
 import { NavLink, useHistory, useLocation } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
 import { useRoutes } from '../routes'
+import { Loader } from './Loader'
 import Drawer from '@material-ui/core/Drawer'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -106,6 +107,7 @@ export const MiniDrawer = (props) => {
   const auth = useContext(AuthContext)
   const isAuth = auth.isAuthenticated
   const role = auth.role
+  const ready = auth.ready
   const curPath = useLocation().pathname
   const routes = useRoutes(isAuth)
   const openUser = Boolean(props.anchorEl)
@@ -147,7 +149,6 @@ export const MiniDrawer = (props) => {
   const handleMenuClose = () => {
     props.closeMenu()
   }
-
 
   return (
     <div className={classes.root}>
@@ -198,10 +199,10 @@ export const MiniDrawer = (props) => {
               open={openUser}
               onClose={handleMenuClose}
             >
-              {!isAuth && <MenuItem onClick={() => authHandler(false)}>Вход</MenuItem>}
-              {!isAuth && <MenuItem onClick={() => authHandler(true)}>Регистрация</MenuItem>}
-              {isAuth && <MenuItem onClick={() => profileHandler()}>Личный кабинет</MenuItem>}
-              {isAuth && <MenuItem onClick={logoutHandler}>Выход</MenuItem>}
+              {!isAuth && ready && <MenuItem onClick={() => authHandler(false)}>Вход</MenuItem>}
+              {!isAuth && ready && <MenuItem onClick={() => authHandler(true)}>Регистрация</MenuItem>}
+              {isAuth && ready && <MenuItem onClick={() => profileHandler()}>Личный кабинет</MenuItem>}
+              {isAuth && ready && <MenuItem onClick={logoutHandler}>Выход</MenuItem>}
             </Menu>
           </div>
         </Toolbar>
@@ -270,7 +271,8 @@ export const MiniDrawer = (props) => {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        {routes}
+        {ready && routes}
+        {!ready && <Loader />}
       </main>
     </div>
   )

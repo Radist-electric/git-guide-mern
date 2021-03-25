@@ -5,11 +5,10 @@ import { useHistory, useLocation } from 'react-router-dom'
 import { Loader } from '../components/Loader'
 import { connect } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
-import is from 'is_js'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField'
+import AuthForm from '../components/forms/AuthForm'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -90,70 +89,6 @@ export const AuthPage = (props) => {
     }
   }
 
-  const renderInputs = () => {
-    return Object.keys(props.formControls).map((controlName, index) => {
-      const control = props.formControls[controlName]
-      return (
-        <TextField
-          value={control.value}
-          key={controlName + index}
-          id={control.id}
-          type={control.type}
-          name={control.name}
-          label={control.label}
-          fullWidth={true}
-          margin='normal'
-          required={!!control.validation && control.validation.required}
-          error={!control.valid && control.touched}
-          helperText={!control.valid && control.touched && control.errorMessage}
-          onKeyPress={pressHandler}
-          onChange={event => onChangeHandler(event, controlName)}
-        />
-      )
-    })
-  }
-
-  const onChangeHandler = (event, controlName) => {
-    const formControls = { ...props.formControls }
-    const control = { ...formControls[controlName] }
-
-    control.value = event.target.value
-    control.touched = true
-    control.valid = validateControl(control.value, control.validation)
-
-    formControls[controlName] = control
-
-    let isFormValid = true
-
-    Object.keys(formControls).forEach(name => {
-      isFormValid = formControls[name].valid && isFormValid
-    })
-    props.changeformControls(formControls, isFormValid)
-    props.changeForm({ ...props.form, [event.target.name]: event.target.value })
-  }
-
-  const validateControl = (value, validation) => {
-    if (!validation) {
-      return true
-    }
-
-    let isValid = true
-
-    if (validation.required) {
-      isValid = value.trim() !== '' && isValid
-    }
-
-    if (validation.email) {
-      isValid = is.email(value) && isValid
-    }
-
-    if (validation.minLength) {
-      isValid = value.length >= validation.minLength && isValid
-    }
-
-    return isValid
-  }
-
   const initInputs = () => {
     props.initForm()
     props.initFormControls()
@@ -166,7 +101,7 @@ export const AuthPage = (props) => {
       </Paper>
       <Paper className={classes.paper} elevation={3}>
         <h2 className='card-title'>{props.register === true ? 'Регистрация' : 'Авторизация'}</h2>
-        {renderInputs()}
+        <AuthForm pressHandler={pressHandler}/>
         <Grid container spacing={3} className={classes.buttons}>
           <Grid item xs={12} sm={6}>
             <Button
@@ -199,7 +134,6 @@ function mapStateToProps(state) {
   return {
     form: state.authForm.form,
     isFormValid: state.authValid.isFormValid,
-    formControls: state.authValid.formControls,
     register: state.authRegister.register
   }
 }
@@ -207,9 +141,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     showPopup: (text, typeText) => dispatch({ type: 'SHOW', payload: { text, typeText } }),
-    changeForm: (form) => dispatch({ type: 'CHANGE_FORM', payload: form }),
     initForm: () => dispatch({ type: 'INIT_FORM' }),
-    changeformControls: (formControls, isFormValid) => dispatch({ type: 'CHANGE_FORMCONTROLS', payload: { formControls, isFormValid } }),
     initFormControls: () => dispatch({ type: 'INIT_FORMCONTROLS' }),
     changeRegister: (value) => dispatch({ type: 'CHANGE_REGISTER', payload: {value} })
   }

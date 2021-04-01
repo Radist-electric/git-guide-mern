@@ -83,12 +83,63 @@ router.post(
         config.get('jwtsecret'),
         { expiresIn: '1h' }
       )
-      res.json({ token, userId: user.id, userRole: user.role, userNickName: user.nickName, userFirstName: user.firstName, userLastName: user.lastName, message: 'Вы успешно вошли в систему' })
+      res.status(200).json({ token, userId: user.id, userRole: user.role, userNickName: user.nickName, userFirstName: user.firstName, userLastName: user.lastName, message: 'Вы успешно вошли в систему' })
 
     } catch (e) {
       res.status(500).json({ message: 'Что-то пошло не так. Попробуйте снова.' })
     }
 
+  })
+
+//api/auth/get
+router.post(
+  '/get',
+  async (req, res) => {
+    try {
+      const { userId } = req.body
+      const user = await User.findOne({ _id: userId })
+      res.status(200).json({ user, message: 'Данные пользователя отправлены' })
+    } catch (e) {
+      res.status(500).json({ message: 'Что-то пошло не так. Попробуйте снова.' })
+    }
+  })
+
+//api/auth/edit
+router.post(
+  '/update',
+  async (req, res) => {
+    try {
+      const { email, password, nickName, firstName, lastName, role, userId } = req.body
+      const hashedPassword = await bcrypt.hash(password, 12)
+      const update = {
+        email,
+        password: hashedPassword,
+        nickName,
+        firstName,
+        lastName,
+        role
+      }
+      const options = {
+        new: true,
+        useFindAndModify: false
+      }
+
+      await User.findByIdAndUpdate(userId, update, options, (err, result) => {
+        if (err) {
+          res.status(500).json({ err, message: 'Что-то пошло не так. Попробуйте снова.' })
+        } else {
+          const token = jwt.sign(
+            { userId },
+            config.get('jwtsecret'),
+            { expiresIn: '1h' }
+          )
+          res.status(200).json({ token, result, message: 'Данные пользователя изменены' })
+        }
+      })
+
+    } catch (e) {
+      res.status(500).json({ message: 'Что-то пошло не так. Попробуйте снова.' })
+    }
   })
 
 module.exports = router

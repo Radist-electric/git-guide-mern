@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     padding: theme.spacing(2),
     margin: 'auto',
-    maxWidth: 576,
+    maxWidth: 600,
   },
   buttons: {
     marginTop: '20px'
@@ -34,14 +34,16 @@ export const AuthPage = (props) => {
   const auth = useContext(AuthContext)
   const { loading, error, request, clearError } = useHttp()
   const location = useLocation()
-  const {changeRegister} = props
+  const { changeRegister } = props
 
+  // Set Login or Registration mode when switching to the page
   useEffect(() => {
     if (location.state) {
-       changeRegister(location.state.needAuth)
+      changeRegister(location.state.needAuth)
     }
   }, [location, changeRegister])
 
+  // Show error from http
   useEffect(() => {
     if (error) {
       props.showPopup(error, 'error')
@@ -49,6 +51,7 @@ export const AuthPage = (props) => {
     clearError()
   }, [error, clearError, props])
 
+  // New user registration
   const registerHandler = async () => {
     try {
       const data = await request('/api/auth/register', 'POST', { ...props.form })
@@ -61,6 +64,7 @@ export const AuthPage = (props) => {
     } catch (e) { }
   }
 
+  // User login 
   const loginHandler = async () => {
     try {
       const data = await request('/api/auth/login', 'POST', { ...props.form })
@@ -75,10 +79,12 @@ export const AuthPage = (props) => {
     } catch (e) { }
   }
 
+  // Login/Registration toggler
   const regToggler = () => {
     changeRegister(!props.register)
   }
 
+  // Log in or register user if Enter key is pressed
   const pressHandler = event => {
     if (event.key === 'Enter') {
       if (props.register === true) {
@@ -89,6 +95,7 @@ export const AuthPage = (props) => {
     }
   }
 
+  // Clear the form
   const initInputs = () => {
     props.initForm()
     props.initFormControls()
@@ -96,12 +103,12 @@ export const AuthPage = (props) => {
 
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper + ' ' + classes.bgNone} elevation={0}>
+      <Paper className={[classes.paper, classes.bgNone].join(' ')} elevation={0}>
         <h1>Вход / регистрация</h1>
       </Paper>
       <Paper className={classes.paper} elevation={3}>
         <h2 className='card-title'>{props.register === true ? 'Регистрация' : 'Авторизация'}</h2>
-        <AuthForm pressHandler={pressHandler}/>
+        <AuthForm pressHandler={pressHandler} />
         <Grid container spacing={3} className={classes.buttons}>
           <Grid item xs={12} sm={6}>
             <Button
@@ -134,7 +141,8 @@ function mapStateToProps(state) {
   return {
     form: state.authForm.form,
     isFormValid: state.authValid.isFormValid,
-    register: state.authRegister.register
+    register: state.authRegister.register,
+    formControls: state.authValid.formControls // delete
   }
 }
 
@@ -143,7 +151,7 @@ function mapDispatchToProps(dispatch) {
     showPopup: (text, typeText) => dispatch({ type: 'SHOW', payload: { text, typeText } }),
     initForm: () => dispatch({ type: 'INIT_FORM' }),
     initFormControls: () => dispatch({ type: 'INIT_FORMCONTROLS' }),
-    changeRegister: (value) => dispatch({ type: 'CHANGE_REGISTER', payload: {value} })
+    changeRegister: (value) => dispatch({ type: 'CHANGE_REGISTER', payload: { value } })
   }
 }
 

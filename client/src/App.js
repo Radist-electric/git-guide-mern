@@ -10,7 +10,7 @@ function App() {
   const isAuthenticated = !!token
 
   return (
-    <AuthContext.Provider value={{ token, login, logout, userId, ready, role, userNickName, userFirstName, userLastName, isAuthenticated }}>
+    <AuthContext.Provider value={{ login, logout, token, userId, role, userNickName, userFirstName, userLastName, isAuthenticated, ready }}>
       <Router>
         <MiniDrawer />
         <Footer />

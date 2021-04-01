@@ -4,6 +4,7 @@ import TextField from '@material-ui/core/TextField'
 
 export const AuthForm = (props) => {
 
+  // Create a set of input fields from the received data
   const formInputs = () => {
     return Object.keys(props.formControls).map((controlName, index) => {
       const control = props.formControls[controlName]
@@ -27,6 +28,7 @@ export const AuthForm = (props) => {
     })
   }
 
+  // Change data when user enters text
   const onChangeHandler = (event, controlName) => {
     const formControls = { ...props.formControls }
     const control = { ...formControls[controlName] }
@@ -45,6 +47,8 @@ export const AuthForm = (props) => {
     props.changeformControls(formControls, isFormValid)
     props.changeForm({ ...props.form, [event.target.name]: event.target.value })
   }
+
+  // Inputs validation
   const validateControl = (value, validation) => {
     if (!validation) {
       return true

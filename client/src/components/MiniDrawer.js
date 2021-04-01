@@ -201,7 +201,7 @@ export const MiniDrawer = (props) => {
             >
               {!isAuth && ready && <MenuItem onClick={() => authHandler(false)}>Вход</MenuItem>}
               {!isAuth && ready && <MenuItem onClick={() => authHandler(true)}>Регистрация</MenuItem>}
-              {isAuth && ready && <MenuItem onClick={() => profileHandler()}>Личный кабинет</MenuItem>}
+              {isAuth && ready && <MenuItem onClick={profileHandler}>Личный кабинет</MenuItem>}
               {isAuth && ready && <MenuItem onClick={logoutHandler}>Выход</MenuItem>}
             </Menu>
           </div>

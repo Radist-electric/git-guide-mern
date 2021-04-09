@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect, useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
 import { useHttp } from '../hooks/http.hook'
 import { connect } from 'react-redux'
@@ -30,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 export const ProfilePage = (props) => {
   const classes = useStyles()
   const auth = useContext(AuthContext)
+  const history = useHistory()
   const [user, setUser] = useState({})
   const [showForm, setShowForm] = useState(false)
   const [dataReceived, setDataReceived] = useState(false)
@@ -40,6 +42,11 @@ export const ProfilePage = (props) => {
   const getUserData = useCallback(async () => {
     try {
       const data = await request('/api/auth/get', 'POST', { userId })
+      if(data.user === null) {
+        auth.logout()
+        history.push('/auth')
+        return
+      }
       setUser(data.user)
       setDataReceived(true)
     } catch (e) { }
@@ -92,22 +99,15 @@ export const ProfilePage = (props) => {
 
   // Update form if Enter key is pressed
   const pressHandler = event => {
-    if (event.key === 'Enter') {
-      updateHandler()
-    }
+    if (event.key === 'Enter' && props.isFormValid) updateHandler()
   }
 
   // Write new user data to the database
   const updateHandler = async () => {
-    console.log('updateHandler', props.form)
-
     try {
       const data = await request('/api/auth/update', 'POST', { ...props.form, userId })
-      console.log('data', data)
       props.showPopup(data.message, 'success')
       auth.login(data.token, data.result._id, data.result.role, data.result.nickName, data.result.firstName, data.result.lastName)
-      // initInputs()
-
     } catch (e) { }
 
     setShowForm(false)

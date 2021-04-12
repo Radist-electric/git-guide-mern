@@ -5,6 +5,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 import { Loader } from '../components/Loader'
 import { connect } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
@@ -104,10 +105,10 @@ export const AuthPage = (props) => {
   return (
     <div className={classes.root}>
       <Paper className={[classes.paper, classes.bgNone].join(' ')} elevation={0}>
-        <h1>Вход / регистрация</h1>
+        <Typography variant="h1" component="h1">Вход / регистрация</Typography>
       </Paper>
       <Paper className={classes.paper} elevation={3}>
-        <h2 className='card-title'>{props.register === true ? 'Регистрация' : 'Авторизация'}</h2>
+        <Typography variant="h2" component="h2">{props.register === true ? 'Регистрация' : 'Авторизация'}</Typography>
         <AuthForm pressHandler={pressHandler} />
         <Grid container spacing={3} className={classes.buttons}>
           <Grid item xs={12} sm={6}>

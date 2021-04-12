@@ -49,9 +49,17 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: 36,
+    [theme.breakpoints.down('sm')]: {
+      marginRight: 12
+    },
   },
   title: {
     flexGrow: 1
+  },
+  name: {
+    [theme.breakpoints.down('xs')]: {
+      display: 'none'
+    },
   },
   link: {
     color: '#000',
@@ -97,6 +105,9 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(1)
+    },
   },
 }))
 
@@ -105,9 +116,7 @@ export const MiniDrawer = (props) => {
   const theme = useTheme()
   const history = useHistory()
   const auth = useContext(AuthContext)
-  const isAuth = auth.isAuthenticated
-  const role = auth.role
-  const ready = auth.ready
+  const { isAuthenticated: isAuth, role, ready, userFirstName } = auth
   const curPath = useLocation().pathname
   const routes = useRoutes(isAuth)
   const openUser = Boolean(props.anchorEl)
@@ -174,6 +183,7 @@ export const MiniDrawer = (props) => {
           <Typography variant="h6" className={classes.title}>
             <NavLink to="/"><img className="logo" src={Logo} alt="logo"></img></NavLink>
           </Typography>
+          {userFirstName && <span className={classes.name}>{userFirstName}</span>}
           <div>
             <IconButton
               aria-label="account of current user"
@@ -287,11 +297,11 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    showPopup: (text) => dispatch({ type: 'SHOW', payload: {text} }),
-    openDrawer: () => dispatch({type: 'OPEN_DRAWER'}),
-    closeDrawer: () => dispatch({type: 'CLOSE_DRAWER'}),
-    openMenu: (event) => dispatch({type: 'OPEN_MENU', payload: {event}}),
-    closeMenu: () => dispatch({type: 'CLOSE_MENU'}),
+    showPopup: (text) => dispatch({ type: 'SHOW', payload: { text } }),
+    openDrawer: () => dispatch({ type: 'OPEN_DRAWER' }),
+    closeDrawer: () => dispatch({ type: 'CLOSE_DRAWER' }),
+    openMenu: (event) => dispatch({ type: 'OPEN_MENU', payload: { event } }),
+    closeMenu: () => dispatch({ type: 'CLOSE_MENU' }),
   }
 }
 

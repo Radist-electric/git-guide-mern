@@ -5,6 +5,7 @@ import { useHttp } from '../hooks/http.hook'
 import { connect } from 'react-redux'
 import { Loader } from '../components/Loader'
 import { makeStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 import Avatar from '@material-ui/core/Avatar'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -42,7 +43,8 @@ export const ProfilePage = (props) => {
   const getUserData = useCallback(async () => {
     try {
       const data = await request('/api/auth/get', 'POST', { userId })
-      if(data.user === null) {
+      // If the user is logged in and has been deleted from the database, then we have to log him out
+      if (data.user === null) {
         auth.logout()
         history.push('/auth')
         return
@@ -50,7 +52,7 @@ export const ProfilePage = (props) => {
       setUser(data.user)
       setDataReceived(true)
     } catch (e) { }
-  }, [request, userId])
+  }, [request, userId, auth, history])
 
   const fillForm = () => {
     const formControls = JSON.parse(JSON.stringify(props.formControls))
@@ -122,11 +124,11 @@ export const ProfilePage = (props) => {
 
   return (
     <div>
-      <h1>Личный кабинет</h1>
+      <Typography variant="h1" component="h1">Личный кабинет</Typography>
       {!dataReceived && !loading &&
         <>
-          <p>Что-то пошло не так.</p>
-          <p>Не удалось получить данные пользователя.</p>
+          <Typography variant="body1" component="p">Что-то пошло не так.</Typography>
+          <Typography variant="body1" component="p">Не удалось получить данные пользователя.</Typography>
         </>
       }
       {!showForm && !loading && dataReceived && <List dense={true}>

@@ -1,8 +1,10 @@
+import Typography from '@material-ui/core/Typography'
+
 export const NotFoundPage = () => {
   return (
-    <div>
-      <h1>Ошибка 404</h1>
-      <p>Страница не найдена</p>
-    </div>
+    <>
+      <Typography variant="h1" component="h1">Ошибка 404</Typography>
+      <Typography variant="body1" component="p">Страница не найдена</Typography>
+    </>
   )
 }
